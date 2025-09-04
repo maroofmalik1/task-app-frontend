@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api";
 
-export default function Tasks() {
+export default function Tasks({setToken}) {
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
@@ -40,10 +40,11 @@ export default function Tasks() {
     setTasks(tasks.filter((t) => t._id !== id));
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    nav("/login");
-  };
+const logout = () => {
+  localStorage.removeItem('token')
+  setToken(null)
+  nav('/login')
+}
 
   return (
     <div className="container">
