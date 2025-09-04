@@ -17,7 +17,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login setToken={setToken} />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Register setToken={setToken} />} />{' '}
         <Route path="/tasks" element={token ? <Tasks setToken={setToken} /> : <Navigate to="/login" />} />
         <Route path="*" element={<Navigate to="/tasks" />} />
       </Routes>

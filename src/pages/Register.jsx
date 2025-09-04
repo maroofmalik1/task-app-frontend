@@ -2,21 +2,22 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../api";
 
-export default function Register() {
+export default function Register({setToken}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const nav = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async e => {
+    e.preventDefault()
     try {
-      const res = await API.post("/auth/register", { email, password });
-      localStorage.setItem("token", res.data.token);
-      nav("/tasks");
+      const res = await API.post('/auth/register', {email, password})
+      localStorage.setItem('token', res.data.token)
+      setToken(res.data.token) // <-- Add this line
+      nav('/tasks')
     } catch (err) {
-      alert(err.response?.data?.error || "Error registering");
+      alert(err.response?.data?.error || 'Error registering')
     }
-  };
+  }
 
   return (
     <div className="container">
