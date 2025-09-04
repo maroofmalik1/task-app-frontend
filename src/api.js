@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:4000", // backend URL
+  baseURL: "https://task-app-backend-ndgj.onrender.com", // backend URL
 });
 
 // attach token if exists
