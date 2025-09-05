@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import API from "../api";
-import { useEffect } from "react";
-import {jwtDecode} from 'jwt-decode' 
+import {useState} from 'react'
+import {useNavigate, Link} from 'react-router-dom'
+import API from '../api'
+import {useEffect} from 'react'
+import {jwtDecode} from 'jwt-decode'
 
 function isTokenExpired(token) {
   if (!token) return true
@@ -16,12 +16,14 @@ function isTokenExpired(token) {
 }
 
 export default function Login({setToken}) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const nav = useNavigate();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const nav = useNavigate()
 
   const handleSubmit = async e => {
     e.preventDefault()
+    setLoading(true)
     try {
       const res = await API.post('/auth/login', {email, password})
       localStorage.setItem('token', res.data.token)
@@ -30,6 +32,7 @@ export default function Login({setToken}) {
     } catch (err) {
       console.error(err.response?.data?.error || 'Error logging in')
     }
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -45,22 +48,13 @@ export default function Login({setToken}) {
     <div className="container">
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button>Login</button>
+        <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+        <button>{loading ? 'Loading...' : 'Login'}</button>
       </form>
       <p>
         No account? <Link to="/register">Register</Link>
       </p>
     </div>
-  );
+  )
 }

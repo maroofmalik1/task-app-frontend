@@ -1,14 +1,16 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import API from "../api";
+import {useState} from 'react'
+import {useNavigate, Link} from 'react-router-dom'
+import API from '../api'
 
 export default function Register({setToken}) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const nav = useNavigate();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(true)
+  const nav = useNavigate()
 
   const handleSubmit = async e => {
     e.preventDefault()
+    setLoading(true)
     try {
       const res = await API.post('/auth/register', {email, password})
       localStorage.setItem('token', res.data.token)
@@ -17,28 +19,20 @@ export default function Register({setToken}) {
     } catch (err) {
       alert(err.response?.data?.error || 'Error registering')
     }
+    setLoading(false)
   }
 
   return (
     <div className="container">
       <h1>Register</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button>Sign Up</button>
+        <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+        <button>{loading ? 'Loading...' : 'Sign Up'}</button>
       </form>
       <p>
         Already have an account? <Link to="/login">Login</Link>
       </p>
     </div>
-  );
+  )
 }
