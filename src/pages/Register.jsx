@@ -5,16 +5,16 @@ import API from '../api'
 export default function Register({setToken}) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)   
   const nav = useNavigate()
 
   const handleSubmit = async e => {
     e.preventDefault()
-    setLoading(true)
+    setLoading(true)   
     try {
       const res = await API.post('/auth/register', {email, password})
       localStorage.setItem('token', res.data.token)
-      setToken(res.data.token) // <-- Add this line
+      setToken(res.data.token)
       nav('/tasks')
     } catch (err) {
       alert(err.response?.data?.error || 'Error registering')
@@ -26,9 +26,20 @@ export default function Register({setToken}) {
     <div className="container">
       <h1>Register</h1>
       <form onSubmit={handleSubmit}>
-        <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-        <button>{loading ? 'Loading...' : 'Sign Up'}</button>
+        <input
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+        <button type="submit" disabled={loading}>
+          {loading ? 'Loading...' : 'Register'}  
+        </button>
       </form>
       <p>
         Already have an account? <Link to="/login">Login</Link>
